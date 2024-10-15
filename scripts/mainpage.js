@@ -1,4 +1,4 @@
-let DEBUG = true;
+let DEBUG = false;
 let MAINGRID;
 let IfPlayerDead = false;
 let IfPlayerWin = false;
@@ -19,7 +19,7 @@ const sizes = {
     e: [30, 16, 99],
 };
 
-let choosenSize = sizes.b;
+let choosenSize = sizes.e;
 
 let colors = [];
 colors["0"] = "white";
