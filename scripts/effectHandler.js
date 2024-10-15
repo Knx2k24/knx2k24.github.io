@@ -1,7 +1,9 @@
 const FACE = $("#face");
 
 const PSEUDOBACKGROUND = $("#pseudoBackground");
+const SLIDEBUTTON = $("#hideIcon")
 
+let sideOpen = true;
 
 //https://pixabay.com/illustrations/stars-sky-space-space-wallpaper-2643089/
 const BACKGROUNDS = {
@@ -19,7 +21,6 @@ $(document).ready(() => {
     let bgX = 0;
     let bgY = 0;
     $(document).mousemove(function(event) { //add disable animation hir
-        console.log(event.pageX)
         bgX = lerp(bgX, event.pageX/500, 0.1)
         bgY = lerp(bgY, event.pageY/500, 0.1)
         $("#bgImage").css({
@@ -28,7 +29,25 @@ $(document).ready(() => {
         });
     });
     
+    SLIDEBUTTON.on("click", function(){
+        sideOpen = !sideOpen;
+        AnimateSide(sideOpen)
+    })
 });
+
+function AnimateSide(s){
+    if(s){
+        $("#hideIcon").text("<<");
+        $("#sideBar").animate({
+            left: "0px"
+        }, 1000)
+    }else{
+        $("#hideIcon").text(">>");
+        $("#sideBar").animate({
+            left: "-250px"
+        }, 1000)
+    }
+}
 
 var stop = false;
 var frameCount = 0;

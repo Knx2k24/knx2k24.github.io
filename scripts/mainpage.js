@@ -19,7 +19,7 @@ const sizes = {
     e: [30, 16, 99],
 };
 
-let choosenSize = sizes.e;
+let choosenSize = sizes.b;
 
 let colors = [];
 colors["0"] = "white";
@@ -58,11 +58,18 @@ $(document).ready(() => {
             });
         }
     });
+    window.addEventListener('keydown', function(e) {
+        if(e.key == " " && e.target == document.body) {
+          e.preventDefault();
+        }
+      });
+
     $(window).on( "keydown", function(e) { //fast start with space
         if(e.which == 32){
             Initialize(...choosenSize);
         }
     });
+    ShowSelectedMode(0);
 });
 
 function GameLost() {
@@ -97,7 +104,106 @@ function RemoveGlowNerby(x, y){
     }
 }
 
+function ShowSelectedMode(n){
+    
+    if(n == 3){
+
+        $("#modeCustom").css({
+            color: "white",
+            textDecoration: "underline"
+        })
+        $("#modeBegginer").css({
+            color: "gray",
+            textDecoration: "none"
+        })
+        $("#modeIntermediate").css({
+            color: "gray",
+            textDecoration: "none"
+        })
+        $("#modeExpert").css({
+            color: "gray",
+            textDecoration: "none"
+        })
+        choosenSize = [$("#customWidth").val(), $("#customHeight").val(), $("#customBombs").val()];
+    }else if(n == 2){
+        $("#modeCustom").css({
+            color: "gray",
+            textDecoration: "none"
+        })
+        $("#modeBegginer").css({
+            color: "gray",
+            textDecoration: "none"
+        })
+        $("#modeIntermediate").css({
+            color: "gray",
+            textDecoration: "none"
+        })
+        $("#modeExpert").css({
+            color: "white",
+            textDecoration: "underline"
+        })
+        choosenSize = sizes.e;
+    }else if(n == 1){
+        $("#modeCustom").css({
+            color: "gray",
+            textDecoration: "none"
+        })
+        $("#modeBegginer").css({
+            color: "gray",
+            textDecoration: "none"
+        })
+        $("#modeIntermediate").css({
+            color: "white",
+            textDecoration: "underline"
+        })
+        $("#modeExpert").css({
+            color: "gray",
+            textDecoration: "none"
+        })
+        choosenSize = sizes.i;
+    }else{
+        $("#modeCustom").css({
+            color: "gray",
+            textDecoration: "none"
+        })
+        $("#modeBegginer").css({
+            color: "white",
+            textDecoration: "underline"
+        })
+        $("#modeIntermediate").css({
+            color: "gray",
+            textDecoration: "none"
+        })
+        $("#modeExpert").css({
+            color: "gray",
+            textDecoration: "none"
+        })
+
+        choosenSize = sizes.b;
+    }
+}
+
 function Initialize(x, y, b, c) {
+
+    //UGLY ASS MOBILE OPT
+
+    if($(window).height() >= $(window).width()){
+        $("#sideBar").css({
+            display: "none"
+        })
+        $("#pseudoBackground").css({
+            display: "none"
+        })
+    }else{
+        $("#sideBar").css({
+            display: "initial"
+        })
+        $("#pseudoBackground").css({
+            display: "initial"
+        })
+    }
+
+
     $("#face").text(emoji.smile);
     IfFirstClick = true;
     gridWidth = x;
@@ -107,20 +213,38 @@ function Initialize(x, y, b, c) {
     IfPlayerDead = false;
     IfPlayerWin = false;
 
+    if (mineCount <= 0 || mineCount >= gridWidth * gridHeight) {
+        
+        mineCount = gridHeight * gridWidth -1;
+    }
+
+    $("#modeBegginer").on("click", function(){
+        ShowSelectedMode(0);
+    })
+    $("#modeIntermediate").on("click", function(){
+        ShowSelectedMode(1);
+    })
+    $("#modeExpert").on("click", function(){
+        ShowSelectedMode(2);
+    })
+    $("#modeCustom").on("click", function(){
+        ShowSelectedMode(3);
+    })
+
     $("#face").on("click", function(){
         Initialize(...choosenSize);
     })
 
+    $("#buttonBegin").on("click", function(){
+        Initialize(...choosenSize);
+    })
 
     $("#dataMarked").html(`Marked <br> <div class="dataNumber">${CountMarked()}</div`);
 
     $("#dataMines").html(`Mines <br> <div class="dataNumber">${mineCount}</div`);
 
     // Validate mine count
-    if (mineCount <= 0 || mineCount > gridWidth * gridHeight) {
-        alert(`SOMETHING WENT TERRIBLY WRONG | MINE NUMBER = ${mineCount}`);
-        return;
-    }
+    
     if(gridWidth*gridHeight>255){
         gridCont.empty().css({
             width: `${gridWidth * 32}px`,
@@ -143,6 +267,15 @@ function Initialize(x, y, b, c) {
         });
         $("#dataContainer").css({
             width: `${gridWidth * 48}px`,
+            top: `${gridCont.position().top - $("#dataContainer").height()}px`
+        });
+    }
+
+    if(gridHeight > 17){
+        gridCont.empty().css({
+            top: "70%"
+        });
+        $("#dataContainer").css({
             top: `${gridCont.position().top - $("#dataContainer").height()}px`
         });
     }
