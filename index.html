@@ -18,12 +18,14 @@
         <div class="modeSelect" id="modeExpert">Expert</div>
         <div class="modeSelect" id="modeCustom">
             Custom 
-            <br>W:<input type="number" min="7" max="36" name="" id="customWidth">
+            <br>W:<input type="number" min="9" max="36" name="" id="customWidth">
                 H:<input type="number" min="1" max="32" name="" id="customHeight">
                 M:<input type="number" min="1" name="" id="customBombs">
-            <br><button id="buttonBegin">Begin</button>
+            <br>
         </div>
+        <button id="buttonBegin">Begin</button>
         <div id="hideIcon"><<</div>
+        <div id="warningTooLarge">Warning: If you make a board too large, it can lag your browser!</div>
     </div>
 
     <div id="gameContainer">
@@ -36,10 +38,15 @@
             if you are seeing this that means something went horribly wrong :(... try refreshing the site or disabling adblocker :)
         </div>
     </div>
+
+    <div id="botomContainer">
+
+    </div>
     
     <script src="scripts/jquery.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="scripts/mainpage.js"></script>
     <script src="scripts/effectHandler.js"></script>
+    <script src="scripts/expertGrids.js"></script>
 </body>
 </html>

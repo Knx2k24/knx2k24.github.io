@@ -3,6 +3,8 @@ let MAINGRID;
 let IfPlayerDead = false;
 let IfPlayerWin = false;
 
+let SEED = 10;
+
 let IfFirstClick = true;
 
 const emoji = {
@@ -39,14 +41,14 @@ let gridHeight = 0;
 let mineCount = 0;
 
 const gridCont = $("#gridContainer");
-$(document).ready(() => {
+$(() => {
     $("#face").text(emoji.smile)
     console.log("document ready");
     document.addEventListener('contextmenu', (event) => event.preventDefault());
     Initialize(...choosenSize);
 
-    $(window).resize(function() { //resize the data window when the player changes aspects 
-        if(gridWidth*gridHeight>255){
+    $(window).on("resize", function() { //resize the data window when the player changes aspects 
+        if(gridWidth*gridHeight>255 || gridHeight >21){
             $("#dataContainer").css({
                 width: `${gridWidth * 32}px`,
                 top: `${gridCont.position().top - $("#dataContainer").height()}px`
@@ -62,7 +64,7 @@ $(document).ready(() => {
         if(e.key == " " && e.target == document.body) {
           e.preventDefault();
         }
-      });
+    });
 
     $(window).on( "keydown", function(e) { //fast start with space
         if(e.which == 32){
@@ -70,12 +72,38 @@ $(document).ready(() => {
         }
     });
     ShowSelectedMode(0);
+
+    $("#customWidth").val(9);
+    $("#customHeight").val(7);
+    $("#customBombs").val(7);
+
+    $("#modeBegginer").on("click", function(){
+        ShowSelectedMode(0);
+    })
+    $("#modeIntermediate").on("click", function(){
+        ShowSelectedMode(1);
+    })
+    $("#modeExpert").on("click", function(){
+        ShowSelectedMode(2);
+    })
+    $("#modeCustom").on("click", function(){
+        ShowSelectedMode(3);
+    })
+
+    $("#face").on("click", function(){
+        Initialize(...choosenSize);
+    })
+
+    $("#buttonBegin").on("click", function(){
+        Initialize(...choosenSize);
+    })
 });
 
 function GameLost() {
     IfPlayerDead = true;
     $("#face").text(emoji.dead)
     ShowAll();
+    if(sMsOD){alert("No orgasm for you >w<.")}
 }
 function GameWin(){
     IfPlayerWin = true;
@@ -183,8 +211,14 @@ function ShowSelectedMode(n){
     }
 }
 
+let BOARD_STATES_LIST = [];
+let timeAvg = 0;
+let timeIndex = 0;
 function Initialize(x, y, b, c) {
-
+    if(DEBUG){
+        var start = new Date().getTime();
+    }
+    timeIndex += 1;
     //UGLY ASS MOBILE OPT
 
     if($(window).height() >= $(window).width()){
@@ -218,26 +252,7 @@ function Initialize(x, y, b, c) {
         mineCount = gridHeight * gridWidth -1;
     }
 
-    $("#modeBegginer").on("click", function(){
-        ShowSelectedMode(0);
-    })
-    $("#modeIntermediate").on("click", function(){
-        ShowSelectedMode(1);
-    })
-    $("#modeExpert").on("click", function(){
-        ShowSelectedMode(2);
-    })
-    $("#modeCustom").on("click", function(){
-        ShowSelectedMode(3);
-    })
-
-    $("#face").on("click", function(){
-        Initialize(...choosenSize);
-    })
-
-    $("#buttonBegin").on("click", function(){
-        Initialize(...choosenSize);
-    })
+    
 
     $("#dataMarked").html(`Marked <br> <div class="dataNumber">${CountMarked()}</div`);
 
@@ -245,7 +260,7 @@ function Initialize(x, y, b, c) {
 
     // Validate mine count
     
-    if(gridWidth*gridHeight>255){
+    if(gridWidth*gridHeight>255 || gridHeight >21){
         gridCont.empty().css({
             width: `${gridWidth * 32}px`,
             height: `${gridHeight * 32}px`,
@@ -271,7 +286,7 @@ function Initialize(x, y, b, c) {
         });
     }
 
-    if(gridHeight > 17){
+    if(gridHeight > 17 || gridHeight > 23){
         gridCont.empty().css({
             top: "70%"
         });
@@ -280,9 +295,14 @@ function Initialize(x, y, b, c) {
         });
     }
 
-    MakeGrid();
-    AddBombs();
-    AssignNumbers();
+
+    if(choosenSize == sizes.e){
+        GridFromState(EXPERT_GRIDS_SAMPLES);
+    }else{
+        MakeGrid();
+        AddBombs();
+        AssignNumbers();
+    }
 
 
     
@@ -376,6 +396,27 @@ function Initialize(x, y, b, c) {
             $("#face").text(emoji.sunglasses); //idk if this is necesary
         }
     });
+
+    if(DEBUG){
+        var end = new Date().getTime();
+        var time = end - start;
+        timeAvg += time;
+    
+        console.log('Execution time: ' + time + 'ms \n AVG time: ' + timeAvg/timeIndex);
+    }
+    console.log(GetState());
+    // BOARD_STATES_LIST.push(GetState());
+    // sleep(500)
+    // if(timeIndex > 1000){
+    //     console.log("FINISHED!!!");
+    //     console.log(BOARD_STATES_LIST);
+    //     console.log("ENDED!!!")
+    // }else{
+    //     //Initialize(...choosenSize);
+    // }
+}
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function MakeGrid() {
@@ -584,4 +625,57 @@ function CountCorrectMarked(){
         }
     }
     return mCount;
+}
+
+function GetState() {
+    let cells = {
+        w: gridWidth,
+        h: gridHeight,
+        c: ""
+    };
+    $(".cell").each(function (index, element) {
+        cells.c += $(element).data("hasbomb") ? "B" : $(element).data("number").toString();
+    });
+    return cells;
+}
+
+function GridFromState(s, mirror = false){
+    let Grid = s[rInt(0, s.length)];
+    gridWidth = Grid.w;
+    gridHeight = Grid.h;
+
+    let Cells = Grid.c.split('');
+    let Matrix = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(0));
+    
+    for (let x = 0; x < gridHeight; x++) {
+        for (let y = 0; y < gridWidth; y++) {
+            let index = x * gridWidth + y;
+            Matrix[x][y] = Cells[index];
+        }
+    }
+
+    for (let x = 0; x < gridHeight; x++) {
+        for (let y = 0; y < gridWidth; y++) {
+            if(Matrix[x][y] == "B"){
+                if (DEBUG) {
+                    gridCont.append(`
+                        <div style='background-color: red;' class='cell' data-wentover='false' data-marked='false' data-seen='false' data-number='0' data-hasBomb='true' data-x='${x}' data-y='${y}'></div>
+                    `);
+                }else{
+                    gridCont.append(`
+                        <div class='cell' data-wentover='false' data-marked='false' data-seen='false' data-number='0' data-hasBomb='true' data-x='${x}' data-y='${y}'></div>
+                    `);
+                }
+            }else{
+                gridCont.append(`
+                    <div class='cell' data-wentover='false' data-marked='false' data-seen='false' data-number='${Matrix[x][y]}' data-hasBomb='false' data-x='${x}' data-y='${y}'></div>
+                `);
+            }
+        }
+    }
+
+    $(".cell").css({
+        width: gridCont.width() / gridWidth,
+        height: gridCont.height() / gridHeight,
+    });
 }

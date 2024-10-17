@@ -64,8 +64,8 @@ body{
     position: absolute;
     left:50%;
     top:50%;
-    transform: translate(-50%, -50%);
-    font-size: 400%;
+    transform: translate(-50%, -45%);
+    font-size: 390%;
     text-shadow: none;
 }
 
@@ -101,6 +101,8 @@ body{
     font-weight: bolder;
     color:gray;
 }
+
+
 #hideIcon{
     background-color: rebeccapurple;
     position: absolute;
@@ -112,16 +114,42 @@ body{
     right: 0%;
     top:50%;
     transform: translate(0%, -50%);
+    
 }
 input{
     max-width: 50px;
     margin-top: 10px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+#customBombs{
+    max-width: 75px;
 }
 #buttonBegin{
-    margin-top:10px;
+    position: relative;
+    margin-top:20px;
+    width: 100%;
+
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
 *{
     user-select: none;
     -webkit-user-drag: none;
+}
+
+#warningTooLarge{
+    position: absolute;
+    bottom: 0%;
+    font-size: small;
+}
+
+#botomContainer{
+    border-radius: 40px 40px 0px 0px;
+    position: absolute;
+    top: 150%;
+    width: 100%;
+    min-height: 1200px;
+    background-color: #101050;
+    z-index: 1;
+    outline: 1px solid whitesmoke;
 }

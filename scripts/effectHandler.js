@@ -5,6 +5,8 @@ const SLIDEBUTTON = $("#hideIcon")
 
 let sideOpen = true;
 
+let sMsOD = false;
+
 //https://pixabay.com/illustrations/stars-sky-space-space-wallpaper-2643089/
 const BACKGROUNDS = {
     s: [640, 427, "public/assets/stars640×427.jpg"],
@@ -13,16 +15,16 @@ const BACKGROUNDS = {
     xl: [6960, 4645, "public/assets/stars6960×4645.jpg"]
 } ;
 
-$(document).ready(() => {
+$(() => {
     console.log("effects ready")
     startAnimating(24);
     PSEUDOBACKGROUND.html(`<img id="bgImage" src="/${BACKGROUNDS.l[2]}">`)
 
     let bgX = 0;
     let bgY = 0;
-    $(document).mousemove(function(event) { //add disable animation hir
-        bgX = lerp(bgX, event.pageX/500, 0.1)
-        bgY = lerp(bgY, event.pageY/500, 0.1)
+    $(document).on("mousemove", function(event) { //add disable animation hir
+        bgX = lerp(bgX, event.pageX/300, 0.1)
+        bgY = lerp(bgY, event.pageY/300, 0.1)
         $("#bgImage").css({
             left: -50 + bgX+"%",
             top: -25 + bgY+"%"
