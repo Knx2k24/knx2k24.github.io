@@ -27,7 +27,7 @@ $(() => {
         bgY = lerp(bgY, event.pageY/300, 0.1)
         $("#bgImage").css({
             left: -50 + bgX+"%",
-            top: -25 + bgY+"%"
+            top: -25 + bgY+"%",
         });
     });
     
@@ -41,12 +41,12 @@ function AnimateSide(s){
     if(s){
         $("#hideIcon").text("<<");
         $("#sideBar").animate({
-            left: "0px"
+            left: "10px"
         }, 1000)
     }else{
         $("#hideIcon").text(">>");
         $("#sideBar").animate({
-            left: "-250px"
+            left: "-280px"
         }, 1000)
     }
 }
@@ -93,12 +93,6 @@ function glowFace(s, c, f){
     }else{
         FACE.css("text-shadow", "none");
     }
-}
-
-function MoveBackground(x, y){
-    $("body").css({
-        backgroundPosition: `${x}px ${200+y}px 0px 0px`
-    })
 }
 
 

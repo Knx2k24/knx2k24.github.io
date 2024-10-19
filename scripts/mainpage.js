@@ -48,6 +48,12 @@ $(() => {
     Initialize(...choosenSize);
 
     $(window).on("resize", function() { //resize the data window when the player changes aspects 
+        if(document.documentElement.clientHeight+200 > document.documentElement.clientWidth){
+            $("#bgImage").css("display", "none")
+        }else{
+            $("#bgImage").css("display", "initial")
+        }
+
         if(gridWidth*gridHeight>255 || gridHeight >21){
             $("#dataContainer").css({
                 width: `${gridWidth * 32}px`,
@@ -222,16 +228,10 @@ function Initialize(x, y, b, c) {
     //UGLY ASS MOBILE OPT
 
     if($(window).height() >= $(window).width()){
-        $("#sideBar").css({
-            display: "none"
-        })
         $("#pseudoBackground").css({
             display: "none"
         })
     }else{
-        $("#sideBar").css({
-            display: "initial"
-        })
         $("#pseudoBackground").css({
             display: "initial"
         })

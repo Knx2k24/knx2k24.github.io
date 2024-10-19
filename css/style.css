@@ -1,9 +1,10 @@
 body{
-    background-color: #000;
     height: 100%;
     background-position: 0px 0px 0px 0px;
     background-repeat: no-repeat;
     background-size: 100%;
+
+    background-color: #101020;
 }
 
 #gridContainer{
@@ -28,7 +29,7 @@ body{
     background-color: #101010;
 }
 #dataContainer{
-    position: relative;
+    position: absolute;
     width: 10px;
     height: 100px;
     background-color: #101050;
@@ -59,13 +60,16 @@ body{
 .dataNumber{
     text-align: center;
     width: 100%;
+    
 }
 #face{
+    max-height: 80vh;
     position: absolute;
     left:50%;
     top:50%;
     transform: translate(-50%, -45%);
     font-size: 390%;
+    min-width: 60px;
     text-shadow: none;
 }
 
@@ -77,8 +81,8 @@ body{
 
 #bgImage{
     position: relative;
-    width: 200%;
-    height: 200%;
+    width: 220%;
+    height: 220%;
     overflow: hidden;
 }
 
@@ -100,6 +104,7 @@ body{
     font-size: 100%;
     font-weight: bolder;
     color:gray;
+
 }
 
 
@@ -120,9 +125,6 @@ input{
     max-width: 50px;
     margin-top: 10px;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-}
-#customBombs{
-    max-width: 75px;
 }
 #buttonBegin{
     position: relative;
@@ -146,10 +148,18 @@ input{
 #botomContainer{
     border-radius: 40px 40px 0px 0px;
     position: absolute;
-    top: 150%;
+    top: 130%;
     width: 100%;
     min-height: 1200px;
     background-color: #101050;
     z-index: 1;
     outline: 1px solid whitesmoke;
+}
+
+@media (max-width: 768px) {
+    #mainWrapper{
+        position: absolute;
+        width: 400%;
+        height: 100%;
+    }
 }
